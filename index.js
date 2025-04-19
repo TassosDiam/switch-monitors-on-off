@@ -1,5 +1,3 @@
-#!/home/tassos/.nvm/versions/node/v20.18.3/bin/node
-
 const { exec } = require("child_process");
 const { screens, scripts } = require("./config");
 const {
