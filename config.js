@@ -9,22 +9,33 @@ if (!fs.existsSync(configFilePath)) {
   process.exit(1);
 }
 
-let { screens, scripts } = require("./config.json");
-screens = Number(screens);
-if (isNaN(screens) || !scripts) {
+let { scripts } = require("./config.json");
+if (!scripts) {
   console.log(
     "ERROR: Invalid config.json file. Please view config.example.json file for schema details"
   );
   process.exit(1);
 }
 
+const screens = Object.keys(scripts)[0].length;
+
 const permutations = cartesianPower([0, 1], screens).map((arr) => arr.join(""));
 const missingScripts = permutations.filter(
   (permutation) => !scripts[permutation]
 );
+const invalidScripts = Object.keys(scripts).filter(
+  (key) => !permutations.includes(key)
+);
 
 if (missingScripts.length > 0) {
   console.log("ERROR: Missing scripts for:", missingScripts.join(", "));
+  process.exit(1);
+}
+if (invalidScripts.length > 0) {
+  console.log(
+    "ERROR: Invalid scripts found in config:",
+    invalidScripts.join(", ")
+  );
   process.exit(1);
 }
 
