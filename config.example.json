@@ -1,4 +1,5 @@
 {
+  "defaultStatus": [1, 1, 1],
   "scripts": {
     "000": "xrandr --output eDP-1 --off --output HDMI-1 --off --output DP-1 --off --output DP-2 --off",
     "001": "xrandr --output eDP-1 --off --output HDMI-1 --primary --mode 2560x1440 --pos 4480x0 --rotate normal --output DP-1 --off --output DP-2 --off",

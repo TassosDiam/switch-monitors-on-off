@@ -1,12 +1,12 @@
 const { exec } = require("child_process");
-const { screens, scripts } = require("./config");
+const { screens, scripts, defaultStatus } = require("./config");
 const {
   init,
   getScreensStatus,
   updateScreensStatus,
 } = require("./screensStatus");
 
-init(screens);
+init(screens, defaultStatus);
 
 const argument = process.argv[2];
 const argumentArray = argument.split("-");
@@ -21,7 +21,7 @@ if (argumentArray.length === 1) {
   }
   screenToToggle--;
 
-  screensStatus = getScreensStatus(screens);
+  screensStatus = getScreensStatus(screens, defaultStatus);
 
   screensStatus[screenToToggle] = Math.abs(screensStatus[screenToToggle] - 1);
 } else {

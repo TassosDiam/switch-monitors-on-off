@@ -9,7 +9,7 @@ if (!fs.existsSync(configFilePath)) {
   process.exit(1);
 }
 
-let { scripts } = require("./config.json");
+let { scripts, defaultStatus } = require("./config.json");
 if (!scripts) {
   console.log(
     "ERROR: Invalid config.json file. Please view config.example.json file for schema details"
@@ -39,4 +39,15 @@ if (invalidScripts.length > 0) {
   process.exit(1);
 }
 
-module.exports = { screens, scripts };
+if (defaultStatus) {
+  if (!Array.isArray(defaultStatus) || defaultStatus.length !== screens) {
+    console.log("ERROR: Invalid default status config value");
+    process.exit(1);
+  }
+  if (defaultStatus.some((item) => ![0, 1].includes(item))) {
+    console.log("ERROR: Invalid default status config value");
+    process.exit(1);
+  }
+}
+
+module.exports = { screens, scripts, defaultStatus };
