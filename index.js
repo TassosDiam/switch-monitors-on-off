@@ -8,17 +8,34 @@ const {
 
 init(screens);
 
-let screenToToggle = Number(process.argv[2]);
-if (isNaN(screenToToggle) || screenToToggle < 1 || screenToToggle > screens) {
-  console.log("ERROR: Invalid screen number");
-  process.exit(1);
+const argument = process.argv[2];
+const argumentArray = argument.split("-");
+let scriptKey = "";
+let screensStatus = [];
+
+if (argumentArray.length === 1) {
+  let screenToToggle = Number(argument);
+  if (isNaN(screenToToggle) || screenToToggle < 1 || screenToToggle > screens) {
+    console.log("ERROR: Invalid script argument");
+    process.exit(1);
+  }
+  screenToToggle--;
+
+  screensStatus = getScreensStatus(screens);
+
+  screensStatus[screenToToggle] = Math.abs(screensStatus[screenToToggle] - 1);
+} else {
+  if (argumentArray.length !== screens) {
+    console.log("ERROR: Invalid script argument");
+    process.exit(1);
+  }
+  if (argumentArray.some((item) => !["0", "1"].includes(item))) {
+    console.log("ERROR: Invalid script argument");
+    process.exit(1);
+  }
+  screensStatus = argumentArray.map((item) => Number(item));
 }
-screenToToggle--;
-
-const screensStatus = getScreensStatus(screens);
-
-screensStatus[screenToToggle] = Math.abs(screensStatus[screenToToggle] - 1);
-const scriptKey = screensStatus.join("");
+scriptKey = screensStatus.join("");
 
 updateScreensStatus(screensStatus);
 
