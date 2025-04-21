@@ -1,15 +1,18 @@
 const path = require("path");
 const fs = require("fs");
+const { execSync } = require("child_process");
 
 const statusFile = path.join(__dirname, "screensStatus.json");
 
-const argv = process.argv[2];
-
 exports.init = function (screens) {
-  if (!argv || argv === "init") {
+  const lastRebootInfo = execSync("who -b").toString().slice(0, -1);
+  const lastRebootTime = new Date(
+    lastRebootInfo.split(" ").slice(-2).join("T")
+  );
+  const statusFileLastUpdate = fs.statSync(statusFile).mtime;
+  if (statusFileLastUpdate < lastRebootTime) {
     const screensStatus = new Array(screens).fill(1);
     fs.writeFileSync(statusFile, JSON.stringify(screensStatus));
-    process.exit(0);
   }
 };
 
